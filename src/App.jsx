@@ -33,8 +33,21 @@ export default function App() {
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
+        const nodesWithHandlers = (parsedData.nodes || []).map(node => ({
+          ...node,
+          data: {
+            ...node.data,
+            dob: node.data.dob || '', // Ensure empty string if no date
+            dod: node.data.dod || '', // Ensure empty string if no date
+            onEdit: () => {
+              setSelectedNode(node);
+              setShowEditModal(true);
+            },
+            onDelete: () => handleDeleteNode(node.id),
+          }
+        }));
         return {
-          nodes: parsedData.nodes || [],
+          nodes: nodesWithHandlers,
           edges: parsedData.edges || []
         };
       } catch (e) {
@@ -56,11 +69,14 @@ export default function App() {
     const saveState = () => {
       const dataToSave = {
         nodes: nodes.map(node => ({
-          ...node,
+          id: node.id,
+          type: node.type,
+          position: node.position,
           data: {
             name: node.data.name,
             dob: node.data.dob,
             dod: node.data.dod
+            // Don't save the functions here
           }
         })),
         edges
@@ -91,8 +107,8 @@ export default function App() {
       },
       data: {
         name: personName,
-        dob,
-        dod,
+        dob: dob || '', // Ensure empty string if no date
+        dod: dod || '', // Ensure empty string if no date
         onEdit: () => {
           setSelectedNode(newNode);
           setShowEditModal(true);
@@ -106,6 +122,7 @@ export default function App() {
     setDod('');
   };
 
+
   const handleDeleteNode = (nodeId) => {
     setNodes((nodes) => nodes.filter((node) => node.id !== nodeId));
     setEdges((edges) =>
@@ -118,14 +135,14 @@ export default function App() {
       nodes.map((node) =>
         node.id === nodeId
           ? {
-              ...node,
-              data: {
-                ...node.data,
-                ...newData,
-                onEdit: node.data.onEdit,
-                onDelete: node.data.onDelete,
-              },
-            }
+            ...node,
+            data: {
+              ...node.data,
+              ...newData,
+              onEdit: node.data.onEdit,
+              onDelete: node.data.onDelete,
+            },
+          }
           : node
       )
     );
