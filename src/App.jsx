@@ -60,6 +60,7 @@ export default function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(loadState().nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(loadState().edges);
   const [personName, setPersonName] = useState('');
+  const [gender, setGender] = useState('male'); 
   const [dob, setDob] = useState('');
   const [dod, setDod] = useState('');
   const [selectedNode, setSelectedNode] = useState(null);
@@ -74,16 +75,15 @@ export default function App() {
           position: node.position,
           data: {
             name: node.data.name,
+            gender: node.data.gender || 'male', // Default if missing
             dob: node.data.dob,
             dod: node.data.dod
-            // Don't save the functions here
           }
         })),
         edges
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     };
-
     saveState();
   }, [nodes, edges]);
 
@@ -107,8 +107,9 @@ export default function App() {
       },
       data: {
         name: personName,
-        dob: dob || '', // Ensure empty string if no date
-        dod: dod || '', // Ensure empty string if no date
+        gender, // Add gender to the node data
+        dob: dob || '',
+        dod: dod || '',
         onEdit: () => {
           setSelectedNode(newNode);
           setShowEditModal(true);
@@ -120,6 +121,7 @@ export default function App() {
     setPersonName('');
     setDob('');
     setDod('');
+    setGender('male'); // Reset to default after adding
   };
 
 
@@ -175,6 +177,29 @@ export default function App() {
           onChange={(e) => setPersonName(e.target.value)}
           placeholder="Name"
         />
+        <div className="gender-selection">
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              checked={gender === 'male'}
+              onChange={() => setGender('male')}
+            />
+            Male
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              checked={gender === 'female'}
+              onChange={() => setGender('female')}
+            />
+            Female
+          </label>
+          
+        </div>
         <div>
           <label>Date of Birth</label>
           <input

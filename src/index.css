@@ -157,51 +157,98 @@ body{
 
 
 
+.gender-selection {
+  margin: 10px 0;
+  display: flex;
+  gap: 15px;
+}
+
+.gender-selection label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.gender-icon.male {
+  border-left: 4px solid #3498db;
+}
+
+.gender-icon.female {
+  border-left: 4px solid #e91e63;
+}
+
+.gender-icon {
+  font-size: 14px;
+}
+
+.member-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
 .member {
   padding: 10px;
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  min-width: 120px;
-  text-align: center;
-  font-family: sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  min-width: 180px;
+  font-family: Arial, sans-serif;
 }
 
-.handle {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: blue;
+.member-info {
+  margin-bottom: 8px;
 }
 
-.member p {
-  margin: 5px 0 0;
+.member-name {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
 }
 
-.member p + p {
-  margin: 2px 0 0;
+.member-detail {
+  margin: 3px 0;
+  font-size: 12px;
+  color: #555;
+}
+
+.member-age {
+  margin: 3px 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
 .member-buttons {
-  margin-top: 10px;
   display: flex;
   gap: 5px;
   justify-content: center;
+  margin-top: 8px;
 }
 
 .member-button {
-  font-size: 10px;
-  padding: 2px 5px;
+  padding: 3px 8px;
+  font-size: 11px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  color: white;
 }
 
 .member-button.edit {
-  background: #2196f3;
+  background-color: #3498db;
+  color: white;
 }
 
 .member-button.delete {
-  background: #ff4d4d;
+  background-color: #e74c3c;
+  color: white;
+}
+
+.handle {
+  width: 8px;
+  height: 8px;
+  background: #555;
 }

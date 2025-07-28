@@ -12,9 +12,53 @@ const PersonNode = ({ data, isConnectable }) => {
     data.onDelete();
   };
 
+  const calculateAge = (birthDate, deathDate = null) => {
+    if (!birthDate) return 'Unknown age';
+
+    const birth = new Date(birthDate);
+    const today = new Date();
+    const endDate = deathDate ? new Date(deathDate) : today;
+
+    if (isNaN(birth.getTime()) || isNaN(endDate.getTime())) {
+      return 'Invalid date';
+    }
+
+    let age = endDate.getFullYear() - birth.getFullYear();
+    const monthDiff = endDate.getMonth() - birth.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && endDate.getDate() < birth.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'Unknown';
-    return new Date(dateString).toLocaleDateString();
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? 'Invalid date' : date.toLocaleDateString();
+  };
+
+  const getGenderDisplay = () => {
+    switch (data.gender) {
+      case 'male':
+        return 'M'; 
+      case 'female':
+        return 'F'; 
+      default:
+        return '';
+    }
+  };
+
+  const getAgeText = () => {
+    if (!data.dob) return '';
+
+    const age = calculateAge(data.dob, data.dod);
+    if (data.dod) {
+      return `Age at death: ${age}`;
+    } else {
+      return `Current age: ${age}`;
+    }
   };
 
   return (
@@ -34,20 +78,24 @@ const PersonNode = ({ data, isConnectable }) => {
         isConnectable={isConnectable}
       />
 
-      <div>
-        <strong>{data.name}</strong>
-        <p>Born: {formatDate(data.dob)}</p>
-        {data.dod && <p>Died: {formatDate(data.dod)}</p>}
+      <div className="member-info">
+        <div className="member-header">
+          <strong className="member-name">{data.name}</strong>
+          <span className={`gender-icon ${data.gender == "male" ? "male" : "female"}`} >{getGenderDisplay()}</span>
+        </div>
+        <p className="member-detail">Born: {formatDate(data.dob)}</p>
+        {data.dod && <p className="member-detail">Died: {formatDate(data.dod)}</p>}
+        {data.dob && <p className="member-age">{getAgeText()}</p>}
       </div>
 
       <div className="member-buttons">
-        <button 
+        <button
           onClick={handleEdit}
           className="member-button edit"
         >
           Edit
         </button>
-        <button 
+        <button
           onClick={handleDelete}
           className="member-button delete"
         >
