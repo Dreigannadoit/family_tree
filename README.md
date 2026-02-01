@@ -11,3 +11,4 @@ npm run dev
 ~~~
 
 - The Family does not store data within a database and is saved locally in your machine. As long as you don't reset your cache, then it's all goods.
+
